@@ -75,8 +75,8 @@ import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.RootModule;
 import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
-import io.github.yangziwen.checkstyle.calculate.DiffEditCalculator;
-import io.github.yangziwen.checkstyle.calculate.DiffEntryWrapper;
+import io.github.yangziwen.checkstyle.diff.DiffCalculator;
+import io.github.yangziwen.checkstyle.diff.DiffEntryWrapper;
 import io.github.yangziwen.checkstyle.filter.DiffLineFilter;
 
 /**
@@ -800,7 +800,7 @@ public final class Main {
         oldRev = "HEAD~";
         }
         String newRev = "HEAD";
-        DiffEditCalculator calculator = DiffEditCalculator.builder()
+        DiffCalculator calculator = DiffCalculator.builder()
         .diffAlgorithm(new HistogramDiff())
         .build();
         try {

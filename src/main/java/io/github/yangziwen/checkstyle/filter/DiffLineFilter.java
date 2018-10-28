@@ -12,7 +12,7 @@ import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Filter;
 
-import io.github.yangziwen.checkstyle.calculate.DiffEntryWrapper;
+import io.github.yangziwen.checkstyle.diff.DiffEntryWrapper;
 
 /**
  * The diff line filter

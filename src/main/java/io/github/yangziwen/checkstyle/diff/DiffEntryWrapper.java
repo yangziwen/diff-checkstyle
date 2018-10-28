@@ -1,4 +1,4 @@
-package io.github.yangziwen.checkstyle.calculate;
+package io.github.yangziwen.checkstyle.diff;
 
 import java.io.File;
 import java.util.List;

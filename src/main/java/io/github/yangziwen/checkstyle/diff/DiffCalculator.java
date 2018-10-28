@@ -1,4 +1,4 @@
-package io.github.yangziwen.checkstyle.calculate;
+package io.github.yangziwen.checkstyle.diff;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -33,14 +33,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * The diff edit calculator
+ * The diff calculator
  * calculate the diff entries and the corresponding edits between the sepcifed 2 revisions
  *
  * @author yangziwen
  */
 @Getter
 @Builder
-public class DiffEditCalculator {
+public class DiffCalculator {
 
     private static final int DEFAULT_BIG_FILE_THRESHOLD = 10 * 1024 * 1024;
 
@@ -184,6 +184,5 @@ public class DiffEditCalculator {
             throw new RuntimeException(e);
         }
     }
-
 
 }
