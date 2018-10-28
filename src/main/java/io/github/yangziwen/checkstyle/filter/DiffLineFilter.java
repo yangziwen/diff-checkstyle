@@ -38,9 +38,6 @@ public class DiffLineFilter extends AutomaticBean implements Filter {
         if (CollectionUtils.isEmpty(editList)) {
             return false;
         }
-        if (event.getLine() == 1) {
-            return true;
-        }
         for (Edit edit : editList) {
             if (edit.getType() == Edit.Type.DELETE) {
                 continue;
