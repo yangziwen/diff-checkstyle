@@ -13,6 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <checkstyle.base.rev>HEAD~</checkstyle.base.rev>
     </properties>
 
     <dependencies>
@@ -53,6 +54,44 @@
                     <optimize>true</optimize>
                     <debug>true</debug>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <includeProjectDependencies>false</includeProjectDependencies>
+                    <includePluginDependencies>true</includePluginDependencies>
+                    <executableDependency>
+                        <groupId>io.github.yangziwen</groupId>
+                        <artifactId>diff-checkstyle</artifactId>
+                    </executableDependency>
+                    <mainClass>io.github.yangziwen.checkstyle.Main</mainClass>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                    <arguments>
+                        <!-- 可配置任何checkstyle命令行支持的参数 -->
+                        <argument>-c</argument>
+                        <argument>/custom_checks.xml</argument>
+                        <argument>--git-dir</argument>
+                        <argument>${basedir}</argument>
+                        <argument>-f</argument>
+                        <argument>xml</argument>
+                        <argument>-o</argument>
+                        <argument>${project.build.directory}/checkstyle.xml</argument>
+                        <argument>--base-rev</argument>
+                        <!-- 通过系统变量传入base-rev参数 -->
+                        <argument>${checkstyle.base.rev}</argument>
+                    </arguments>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.github.yangziwen</groupId>
+                        <artifactId>diff-checkstyle</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
+                        <type>jar</type>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
