@@ -18,7 +18,52 @@ mvn exec:java \
 -Dexec.mainClass="io.github.yangziwen.checkstyle.Main" \
 -Dexec.args="-c /custom_checks.xml --git-dir ${your_git_repo_path} --base-rev HEAD~3 "
 ```
+* 基于maven的exec插件集成到其他项目中
+   * 执行`mvn install`将diff-checkstyle安装到本地maven仓库
+   * 在需要进行增量代码风格扫描的项目的pom文件中引入以下插件配置
+   ```xml
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <configuration>
+            <executable>java</executable>
+            <includeProjectDependencies>false</includeProjectDependencies>
+            <includePluginDependencies>true</includePluginDependencies>
+            <executableDependency>
+                <groupId>io.github.yangziwen</groupId>
+                <artifactId>diff-checkstyle</artifactId>
+            </executableDependency>
+            <mainClass>io.github.yangziwen.checkstyle.Main</mainClass>
+            <cleanupDaemonThreads>false</cleanupDaemonThreads>
+            <arguments>
+                <!-- 可配置任何checkstyle命令行支持的参数 -->
+                <argument>-c</argument>
+                <argument>/custom_checks.xml</argument>
+                <argument>--git-dir</argument>
+                <argument>${basedir}</argument>
+                <argument>-f</argument>
+                <argument>xml</argument>
+                <argument>-o</argument>
+                <argument>${project.build.directory}/checkstyle.xml</argument>
+                <argument>--base-rev</argument>
+                <!-- 通过系统变量传入base-rev参数 -->
+                <argument>${checkstyle.base.rev}</argument>
+            </arguments>
+        </configuration>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.yangziwen</groupId>
+                <artifactId>diff-checkstyle</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <type>jar</type>
+            </dependency>
+        </dependencies>
+    </plugin>
+   ```
+   * 在项目中执行`mvn exec:java -Dcheckstyle.base.rev=HEAD~10`即可进行增量的代码风格检查，并可在调用脚本中基于命令的返回值($?)判断是否存在代码风格问题。
 
 ### 其他
 * 除了codestyle默认提供的[sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml)和[google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)配置，还追加了[custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml)和[custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml)这两个基本符合阿里巴巴代码规范的配置。
 * 在有未提交的变更文件的情况下进行扫描，有可能导致基于HEAD计算出的变更代码行与工作区实际扫描文件的代码行不一致的情形，因此请先提交所有变更代码后再执行基于git-dir和base-rev参数的代码风格扫描。
+
