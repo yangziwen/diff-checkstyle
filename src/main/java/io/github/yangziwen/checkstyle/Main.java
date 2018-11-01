@@ -211,6 +211,12 @@ public final class Main {
     /** Name for the option 'base-rev' */
     private static final String OPTION_GIT_BASE_REV_NAME = "base-rev";
 
+    /** Name for the option 'ic'. */
+    private static final String OPTION_IC_NAME = "ic";
+
+    /** Name for the option 'include-indexed-codes' */
+    private static final String OPTION_GIT_INCLUDE_INDEXED_CODES_NAME = "include-indexed-codes";
+
     /** Name for 'xml' format. */
     private static final String XML_FORMAT_NAME = "xml";
 
@@ -792,19 +798,18 @@ public final class Main {
         String gitDirPath = commandLine.getOptionValue(OPTION_GIT_DIR_NAME);
         File repoDir = new File(gitDirPath);
         if (!repoDir.isDirectory()) {
-        System.out.println("git directory " + gitDirPath + " is not a directory!");
-        System.exit(1);
+            System.out.println("git directory " + gitDirPath + " is not a directory!");
+            System.exit(1);
         }
         String oldRev = commandLine.getOptionValue(OPTION_GIT_BASE_REV_NAME);
+        boolean includeIndexedCodes = commandLine.hasOption(OPTION_GIT_INCLUDE_INDEXED_CODES_NAME);
         if (StringUtils.isEmptyOrNull(oldRev)) {
-        oldRev = "HEAD~";
+            oldRev = includeIndexedCodes ? "HEAD" : "HEAD~";
         }
         String newRev = "HEAD";
-        DiffCalculator calculator = DiffCalculator.builder()
-        .diffAlgorithm(new HistogramDiff())
-        .build();
+        DiffCalculator calculator = DiffCalculator.builder().diffAlgorithm(new HistogramDiff()).build();
         try {
-            List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev)
+            List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev, includeIndexedCodes)
                     .stream()
                     .filter(diffEntry -> !diffEntry.isDeleteOnly())
                     .collect(Collectors.toList());
@@ -928,7 +933,9 @@ public final class Main {
                 "(experimental) The number of TreeWalker threads (must be greater than zero)");
         options.addOption(OPTION_GD_NAME, OPTION_GIT_DIR_NAME, true, "The git directory");
         options.addOption(OPTION_BR_NAME, OPTION_GIT_BASE_REV_NAME, true,
-        "The git base revision, will proccess the changed files between this revision and HEAD");
+                "The git base revision, will proccess the changed files between this revision and HEAD");
+        options.addOption(OPTION_IC_NAME, OPTION_GIT_INCLUDE_INDEXED_CODES_NAME, false,
+                "Whether to include indexed codes when calculating diffs");
         return options;
     }
 
