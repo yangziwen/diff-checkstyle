@@ -35,7 +35,6 @@ public class DiffHelper {
 
     private static final Method DIFF_ENTRY_MODIFY_METHOD = getDiffEntryModifyMethod();
 
-
     private static final byte[] EMPTY = new byte[] {};
 
     private static final byte[] BINARY = new byte[] {};

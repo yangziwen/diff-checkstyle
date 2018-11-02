@@ -638,8 +638,8 @@ public final class Main {
             rootModule.addListener(listener);
 
             if (CollectionUtils.isNotEmpty(DIFF_ENTRY_LIST) && rootModule instanceof Checker) {
-            Checker checker = (Checker) rootModule;
-            checker.addFilter(new DiffLineFilter(DIFF_ENTRY_LIST));
+                Checker checker = (Checker) rootModule;
+                checker.addFilter(new DiffLineFilter(DIFF_ENTRY_LIST));
             }
 
             // run RootModule

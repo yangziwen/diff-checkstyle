@@ -64,7 +64,12 @@ public class DiffCalculator {
      * @return
      * @throws Exception
      */
-    public List<DiffEntryWrapper> calculateDiff(File repoDir, String oldRev, String newRev, boolean includeIndexedCodes) throws Exception {
+    public List<DiffEntryWrapper> calculateDiff(
+            File repoDir,
+            String oldRev,
+            String newRev,
+            boolean includeIndexedCodes) throws Exception {
+
         try (Git git = Git.open(repoDir);
                 ObjectReader reader = git.getRepository().newObjectReader();
                 RevWalk rw = new RevWalk(git.getRepository())) {
@@ -91,14 +96,14 @@ public class DiffCalculator {
                 Status status = git.status().call();
                 indexedFilePathSet.addAll(status.getAdded());
                 indexedFilePathSet.addAll(status.getChanged());
-                Map<String, byte[]> indexedFileContentMap = getIndexedFileContentMap(git, indexedFilePathSet);
-                Map<String, byte[]> oldRevFileContentMap = getRevFileContentMap(git, oldCommit, indexedFilePathSet, reader);
+                Map<String, BlobWrapper> indexedFileContentMap = getIndexedFileContentMap(git, indexedFilePathSet);
+                Map<String, BlobWrapper> oldRevFileContentMap = getRevFileContentMap(git, oldCommit, indexedFilePathSet, reader);
                 List<DiffEntryWrapper> wrappers = indexedFilePathSet.stream()
                         .map(filePath -> {
-                            byte[] oldBytes = oldRevFileContentMap.get(filePath);
-                            RawText oldText = oldBytes != null ? new RawText(oldBytes) : RawText.EMPTY_TEXT;
-                            RawText newText = new RawText(indexedFileContentMap.get(filePath));
-                            DiffEntry entry = oldBytes == null
+                            BlobWrapper oldBlob = oldRevFileContentMap.get(filePath);
+                            RawText oldText = oldBlob != null ? new RawText(oldBlob.getContent()) : RawText.EMPTY_TEXT;
+                            RawText newText = new RawText(indexedFileContentMap.get(filePath).getContent());
+                            DiffEntry entry = oldBlob == null
                                     ? DiffHelper.createAddDiffEntry(filePath, oldCommit)
                                     : DiffHelper.createModifyDiffEntry(filePath);
                             return DiffEntryWrapper.builder()
@@ -129,7 +134,7 @@ public class DiffCalculator {
         }
     }
 
-    private Map<String, byte[]> getRevFileContentMap(
+    private Map<String, BlobWrapper> getRevFileContentMap(
             Git git, RevCommit commit, Set<String> filePathSet, ObjectReader reader) throws Exception {
         if (CollectionUtils.isEmpty(filePathSet)) {
             return Collections.emptyMap();
@@ -142,7 +147,7 @@ public class DiffCalculator {
          return getContentMapByTreeAndFilter(git, new CanonicalTreeParser(null, reader, commit.getTree()), filter);
     }
 
-    private Map<String, byte[]> getIndexedFileContentMap(Git git, Set<String> filePathSet) throws Exception {
+    private Map<String, BlobWrapper> getIndexedFileContentMap(Git git, Set<String> filePathSet) throws Exception {
         if (CollectionUtils.isEmpty(filePathSet)) {
             return Collections.emptyMap();
         }
@@ -155,9 +160,9 @@ public class DiffCalculator {
         return getContentMapByTreeAndFilter(git, new DirCacheIterator(index), filter);
     }
 
-    private Map<String, byte[]> getContentMapByTreeAndFilter(
+    private Map<String, BlobWrapper> getContentMapByTreeAndFilter(
             Git git, AbstractTreeIterator tree, TreeFilter filter) throws Exception {
-        Map<String, byte[]> contentMap = new LinkedHashMap<>();
+        Map<String, BlobWrapper> contentMap = new LinkedHashMap<>();
         try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
             treeWalk.addTree(tree);
             treeWalk.setRecursive(true);
@@ -165,7 +170,11 @@ public class DiffCalculator {
             while (treeWalk.next()) {
                 ObjectId objectId = treeWalk.getObjectId(0);
                 ObjectLoader loader = git.getRepository().open(objectId);
-                contentMap.put(treeWalk.getPathString(), loader.getBytes());
+                BlobWrapper blobWrapper = BlobWrapper.builder()
+                        .blobId(objectId)
+                        .content(loader.getBytes())
+                        .build();
+                contentMap.put(treeWalk.getPathString(), blobWrapper);
             }
         }
         return contentMap;
