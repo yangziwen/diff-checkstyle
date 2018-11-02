@@ -264,10 +264,14 @@ public final class Main {
                 List<File> filesToProcess = Collections.emptyList();
 
                 if (commandLine.hasOption(OPTION_GIT_DIR_NAME)) {
-                filesToProcess = getGitDiffFilesToProcess(commandLine);
+                    filesToProcess = getGitDiffFilesToProcess(commandLine);
+                    if (CollectionUtils.isEmpty(filesToProcess)) {
+                        System.out.println("There is no file need to check");
+                        return;
+                    }
                 } else {
-                filesToProcess = getFilesToProcess(getExclusions(commandLine),
-                commandLine.getArgs());
+                    filesToProcess = getFilesToProcess(getExclusions(commandLine),
+                            commandLine.getArgs());
                 }
 
                 // return error if something is wrong in arguments

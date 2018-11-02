@@ -67,4 +67,5 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
 ### 其他
 * 除了codestyle默认提供的[sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml)和[google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)配置，还追加了[custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml)和[custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml)这两个基本符合阿里巴巴代码规范的配置。
 * 在有未提交(或未加入暂存区)的变更文件的情况下进行扫描，有可能导致工具计算出的变更代码行与工作区实际扫描文件的代码行不一致的情形，因此请先提交所有变更代码后再执行基于git-dir和base-rev参数的代码风格扫描。
+* 将[pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit)脚本和diff-checkstyle.jar文件拷贝到git的hooks目录中(${git_dir}/.git/hooks)，即可实现每次提交commit前的增量代码风格检查
 
