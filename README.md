@@ -5,7 +5,7 @@
 针对这一痛点，本人对checkstyle的命令行工具进行了扩展，使其支持仅检查和输出增量变更的代码行中出现的风格问题。
 
 ### 使用方法
-* 本工具在checkstyle[原有命令行参数](http://checkstyle.sourceforge.net/cmdline.html)的基础上，新增<b>--git-dir</b>和<b>--base-rev</b>两个参数。
+* 本工具在checkstyle[原有命令行参数](http://checkstyle.sourceforge.net/cmdline.html)的基础上，新增<b>--git-dir</b>、<b>--include-indexed-codes</b>和<b>--base-rev</b>三个参数。
     * git-dir：用于指定git代码库的根目录。使用此参数时，工具会忽略按checkstyle原生方式指定的待扫描文件，而是查找base-rev与HEAD之间发生过变更的代码文件进行扫描。
     * include-indexed-codes：携带此选项时，工具在计算变更代码行的过程中会将暂存区内的变更一并计算在内。
     * base-rev：用于指定将最新代码(HEAD)与哪个历史版本(commit or branch or tag)进行比对。可以省略此参数，当指定include-indexed-codes选项时，base-rev缺省值为HEAD(即最新的commit)，否则缺省值为HEAD~(即最新commit的第一父节点)。
