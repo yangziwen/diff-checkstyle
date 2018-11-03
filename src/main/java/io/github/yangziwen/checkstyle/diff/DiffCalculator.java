@@ -80,7 +80,7 @@ public class DiffCalculator {
             List<DiffEntryWrapper> wrappers = new ArrayList<>();
 
             if (includeIndexedCodes) {
-                wrappers.addAll(doCalculateIndexedDiff(oldCommit, newCommit, reader, git, repoDir));
+                wrappers.addAll(doCalculateIndexedDiff(oldCommit, reader, git, repoDir));
             }
 
             Set<String> indexedPathSet = wrappers.stream()
@@ -128,7 +128,6 @@ public class DiffCalculator {
 
     private List<DiffEntryWrapper> doCalculateIndexedDiff(
             RevCommit oldCommit,
-            RevCommit newCommit,
             ObjectReader reader,
             Git git,
             File repoDir) throws Exception {
