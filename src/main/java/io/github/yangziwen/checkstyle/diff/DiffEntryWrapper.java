@@ -36,6 +36,10 @@ public class DiffEntryWrapper {
         return editList.stream().allMatch(edit -> edit.getType() == Edit.Type.DELETE);
     }
 
+    public String getNewPath() {
+        return diffEntry.getNewPath();
+    }
+
     public String getAbsoluteNewPath() {
         return getNewFile().getAbsolutePath();
     }

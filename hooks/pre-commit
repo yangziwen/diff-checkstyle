@@ -5,6 +5,7 @@ if [ ! -f "${GIT_HOOK_DIR}/diff-checkstyle.jar" ]; then
     echo "diff-checkstyle.jar does not exist!"
     exit 0
 fi
+echo "Check Style"
 java -jar ${GIT_HOOK_DIR}/diff-checkstyle.jar -c /custom_checks.xml --git-dir ${GIT_ROOT_DIR} --include-indexed-codes
 result=$?
 if [ $result -ne 0 ]; then

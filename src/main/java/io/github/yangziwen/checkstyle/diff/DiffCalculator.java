@@ -74,64 +74,85 @@ public class DiffCalculator {
                 ObjectReader reader = git.getRepository().newObjectReader();
                 RevWalk rw = new RevWalk(git.getRepository())) {
 
-            RenameDetector detector = new RenameDetector(git.getRepository());
-
             RevCommit oldCommit = rw.parseCommit(git.getRepository().resolve(oldRev));
             RevCommit newCommit = rw.parseCommit(git.getRepository().resolve(newRev));
-            AbstractTreeIterator oldTree = new CanonicalTreeParser(null, reader, oldCommit.getTree());
-            AbstractTreeIterator newTree = new CanonicalTreeParser(null, reader, newCommit.getTree());
 
-            List<DiffEntry> entries = git.diff()
-                    .setOldTree(oldTree)
-                    .setNewTree(newTree)
-                    .call();
-            detector.reset();
-            detector.addAll(entries);
-            entries = detector.compute();
+            List<DiffEntryWrapper> wrappers = new ArrayList<>();
 
-            List<DiffEntryWrapper> wrapperList = new ArrayList<>();
-
-            Set<String> indexedFilePathSet = new HashSet<>();
             if (includeIndexedCodes) {
-                Status status = git.status().call();
-                indexedFilePathSet.addAll(status.getAdded());
-                indexedFilePathSet.addAll(status.getChanged());
-                Map<String, BlobWrapper> indexedFileContentMap = getIndexedFileContentMap(git, indexedFilePathSet);
-                Map<String, BlobWrapper> oldRevFileContentMap = getRevFileContentMap(git, oldCommit, indexedFilePathSet, reader);
-                List<DiffEntryWrapper> wrappers = indexedFilePathSet.stream()
-                        .map(filePath -> {
-                            BlobWrapper oldBlob = oldRevFileContentMap.get(filePath);
-                            RawText oldText = oldBlob != null ? new RawText(oldBlob.getContent()) : RawText.EMPTY_TEXT;
-                            RawText newText = new RawText(indexedFileContentMap.get(filePath).getContent());
-                            DiffEntry entry = oldBlob == null
-                                    ? DiffHelper.createAddDiffEntry(filePath, oldCommit)
-                                    : DiffHelper.createModifyDiffEntry(filePath);
-                            return DiffEntryWrapper.builder()
-                                    .gitDir(repoDir)
-                                    .diffEntry(entry)
-                                    .editList(calculateEditList(oldText, newText))
-                                    .build();
-                        })
-                        .collect(Collectors.toList());
-                wrapperList.addAll(wrappers);
+                wrappers.addAll(doCalculateIndexedDiff(oldCommit, newCommit, reader, git, repoDir));
             }
 
-            for (DiffEntry entry : entries) {
-                if (indexedFilePathSet.contains(entry.getNewPath())) {
-                    continue;
-                }
-                RawText oldText = newRawText(entry, DiffEntry.Side.OLD, reader);
-                RawText newText = newRawText(entry, DiffEntry.Side.NEW, reader);
-                DiffEntryWrapper wrapper = DiffEntryWrapper.builder()
-                        .gitDir(repoDir)
-                        .diffEntry(entry)
-                        .editList(calculateEditList(oldText, newText))
-                        .build();
-                wrapperList.add(wrapper);
-            }
+            Set<String> indexedPathSet = wrappers.stream()
+                    .map(wrapper -> wrapper.getNewPath())
+                    .collect(Collectors.toSet());
 
-            return wrapperList;
+            wrappers.addAll(doCalculateCommitDiff(oldCommit, newCommit, reader, git, repoDir, indexedPathSet));
+
+            return wrappers;
         }
+    }
+
+    private List<DiffEntryWrapper> doCalculateCommitDiff(
+            RevCommit oldCommit,
+            RevCommit newCommit,
+            ObjectReader reader,
+            Git git,
+            File repoDir,
+            Set<String> excludedPathSet) throws Exception {
+
+        RenameDetector detector = new RenameDetector(git.getRepository());
+        AbstractTreeIterator oldTree = new CanonicalTreeParser(null, reader, oldCommit.getTree());
+        AbstractTreeIterator newTree = new CanonicalTreeParser(null, reader, newCommit.getTree());
+
+        List<DiffEntry> entries = git.diff()
+                .setOldTree(oldTree)
+                .setNewTree(newTree)
+                .call();
+        detector.reset();
+        detector.addAll(entries);
+        entries = detector.compute();
+
+        return entries.stream()
+                .filter(entry -> !excludedPathSet.contains(entry.getNewPath()))
+                .map(entry -> {
+                    RawText oldText = newRawText(entry, DiffEntry.Side.OLD, reader);
+                    RawText newText = newRawText(entry, DiffEntry.Side.NEW, reader);
+                    return DiffEntryWrapper.builder()
+                            .gitDir(repoDir)
+                            .diffEntry(entry)
+                            .editList(calculateEditList(oldText, newText))
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
+    private List<DiffEntryWrapper> doCalculateIndexedDiff(
+            RevCommit oldCommit,
+            RevCommit newCommit,
+            ObjectReader reader,
+            Git git,
+            File repoDir) throws Exception {
+        Set<String> indexedPathSet = new HashSet<>();
+        Status status = git.status().call();
+        indexedPathSet.addAll(status.getAdded());
+        indexedPathSet.addAll(status.getChanged());
+        Map<String, BlobWrapper> indexedFileContentMap = getIndexedFileContentMap(git, indexedPathSet);
+        Map<String, BlobWrapper> oldRevFileContentMap = getRevFileContentMap(git, oldCommit, indexedPathSet, reader);
+        return indexedPathSet.stream()
+                .map(filePath -> {
+                    BlobWrapper oldBlob = oldRevFileContentMap.get(filePath);
+                    RawText oldText = oldBlob != null ? new RawText(oldBlob.getContent()) : RawText.EMPTY_TEXT;
+                    RawText newText = new RawText(indexedFileContentMap.get(filePath).getContent());
+                    DiffEntry entry = oldBlob == null
+                            ? DiffHelper.createAddDiffEntry(filePath, oldCommit)
+                            : DiffHelper.createModifyDiffEntry(filePath);
+                    return DiffEntryWrapper.builder()
+                            .gitDir(repoDir)
+                            .diffEntry(entry)
+                            .editList(calculateEditList(oldText, newText))
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     private Map<String, BlobWrapper> getRevFileContentMap(
