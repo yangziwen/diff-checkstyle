@@ -1,5 +1,7 @@
 # diff-checkstyle
 ![ci](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)
+
+[Chinese Doc](https://github.com/yangziwen/diff-checkstyle/blob/master/README_CN.md)
 ### Introduction
 When using [checkstyle](http://checkstyle.sourceforge.net/) to scan a project, it will output all the problems in each file at once. This makes it difficult to perform an effective style check on the code being developed before cleaning up all the existing style problems.
 
