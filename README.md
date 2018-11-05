@@ -3,7 +3,7 @@
 
 [Chinese Doc](https://github.com/yangziwen/diff-checkstyle/blob/master/README_CN.md)
 ### Introduction
-When using [checkstyle](http://checkstyle.sourceforge.net/) to scan a project, it will output all the problems in each file at once. This makes it difficult to perform an effective style check on the code being developed before cleaning up all the existing style problems.
+When using [checkstyle](http://checkstyle.sourceforge.net/) to scan a project, it will output all the problems in each file at once. This makes it difficult to perform an effective style check on the codes under development before cleaning up all the existing style problems.
 
 In response to this pain point, I extended the checkstyle command-line tool to support style checks only on incremental changes of code lines.
 
@@ -11,7 +11,7 @@ In response to this pain point, I extended the checkstyle command-line tool to s
 * Besides [the original command-line options of checkstyle](http://checkstyle.sourceforge.net/cmdline.html), this tool adds three new options: <b>--git-dir</b>, <b>--include-indexed-codes</b> and <b>--base-rev</b>
     * git-dir：Specify the root directory of the git repository. When using this option, the check job will only consider the files based on git-diff.
     * include-indexed-codes：With this option, the tool will also consider the changes in git staging area.
-    * base-rev：Specify the reference(commit or branch or tag) to which the latest commit(HEAD) will compare for the diff calculation. The default value of <b>base-rev</b> will be HEAD(the latest commit) if <b>--include-indexed-codes</b> is used, otherwise the default is HEAD~(the first parent of the latest commit).
+    * base-rev：Specify the reference(commit or branch or tag) with which the latest commit(HEAD) will compare on the diff calculation. The default value of <b>base-rev</b> will be HEAD(the latest commit) if <b>--include-indexed-codes</b> is used, otherwise the default is HEAD~(the first parent of the latest commit).
 * Run with the jar file
 ```
 java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_path} --base-rev HEAD~3 --include-indexed-codes
@@ -58,7 +58,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
                 <dependency>
                     <groupId>io.github.yangziwen</groupId>
                     <artifactId>diff-checkstyle</artifactId>
-                    <version>0.0.1</version>
+                    <version>${the_version_in_use}</version>
                     <type>jar</type>
                 </dependency>
             </dependencies>

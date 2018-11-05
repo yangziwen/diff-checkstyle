@@ -56,7 +56,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
                 <dependency>
                     <groupId>io.github.yangziwen</groupId>
                     <artifactId>diff-checkstyle</artifactId>
-                    <version>0.0.1</version>
+                    <version>${the_version_in_use}</version>
                     <type>jar</type>
                 </dependency>
             </dependencies>
