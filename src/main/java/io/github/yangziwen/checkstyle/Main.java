@@ -212,10 +212,10 @@ public final class Main {
     private static final String OPTION_GIT_BASE_REV_NAME = "base-rev";
 
     /** Name for the option 'ic'. */
-    private static final String OPTION_IC_NAME = "ic";
+    private static final String OPTION_IS_NAME = "is";
 
-    /** Name for the option 'include-indexed-codes' */
-    private static final String OPTION_GIT_INCLUDE_INDEXED_CODES_NAME = "include-indexed-codes";
+    /** Name for the option 'include-staged-codes' */
+    private static final String OPTION_GIT_INCLUDE_STAGED_CODES_NAME = "include-staged-codes";
 
     /** Name for 'xml' format. */
     private static final String XML_FORMAT_NAME = "xml";
@@ -806,14 +806,14 @@ public final class Main {
             System.exit(1);
         }
         String oldRev = commandLine.getOptionValue(OPTION_GIT_BASE_REV_NAME);
-        boolean includeIndexedCodes = commandLine.hasOption(OPTION_GIT_INCLUDE_INDEXED_CODES_NAME);
+        boolean includeStagedCodes = commandLine.hasOption(OPTION_GIT_INCLUDE_STAGED_CODES_NAME);
         if (StringUtils.isEmptyOrNull(oldRev)) {
-            oldRev = includeIndexedCodes ? "HEAD" : "HEAD~";
+            oldRev = includeStagedCodes ? "HEAD" : "HEAD~";
         }
         String newRev = "HEAD";
         DiffCalculator calculator = DiffCalculator.builder().diffAlgorithm(new HistogramDiff()).build();
         try {
-            List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev, includeIndexedCodes)
+            List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev, includeStagedCodes)
                     .stream()
                     .filter(diffEntry -> !diffEntry.isDeleteOnly())
                     .collect(Collectors.toList());
@@ -938,7 +938,7 @@ public final class Main {
         options.addOption(OPTION_GD_NAME, OPTION_GIT_DIR_NAME, true, "The git directory");
         options.addOption(OPTION_BR_NAME, OPTION_GIT_BASE_REV_NAME, true,
                 "The git base revision, will proccess the changed files between this revision and HEAD");
-        options.addOption(OPTION_IC_NAME, OPTION_GIT_INCLUDE_INDEXED_CODES_NAME, false,
+        options.addOption(OPTION_IS_NAME, OPTION_GIT_INCLUDE_STAGED_CODES_NAME, false,
                 "Whether to include indexed codes when calculating diffs");
         return options;
     }

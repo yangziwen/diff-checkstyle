@@ -58,17 +58,18 @@ public class DiffCalculator {
     /**
      * calculate the diff between the old revision and the new revision
      *
-     * @param repoDir    the git directory
-     * @param oldRev    the old revision
-     * @param newRev    the new revision
+     * @param repoDir               the git directory
+     * @param oldRev                the old revision
+     * @param newRev                the new revision
+     * @param includeStagedCodes    include the staged codes
      * @return
-     * @throws Exception
+     * @throws Exception            throw Exception when error happens
      */
     public List<DiffEntryWrapper> calculateDiff(
             File repoDir,
             String oldRev,
             String newRev,
-            boolean includeIndexedCodes) throws Exception {
+            boolean includeStagedCodes) throws Exception {
 
         try (Git git = Git.open(repoDir);
                 ObjectReader reader = git.getRepository().newObjectReader();
@@ -79,7 +80,7 @@ public class DiffCalculator {
 
             List<DiffEntryWrapper> wrappers = new ArrayList<>();
 
-            if (includeIndexedCodes) {
+            if (includeStagedCodes) {
                 wrappers.addAll(doCalculateIndexedDiff(oldCommit, reader, git, repoDir));
             }
 

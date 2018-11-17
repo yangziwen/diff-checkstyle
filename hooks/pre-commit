@@ -6,7 +6,7 @@ if [ ! -f "${GIT_HOOK_DIR}/diff-checkstyle.jar" ]; then
     exit 0
 fi
 echo "Check Style"
-java -jar ${GIT_HOOK_DIR}/diff-checkstyle.jar -c /custom_checks.xml --git-dir ${GIT_ROOT_DIR} --include-indexed-codes
+java -jar ${GIT_HOOK_DIR}/diff-checkstyle.jar -c /custom_checks.xml --git-dir ${GIT_ROOT_DIR} --include-staged-codes
 result=$?
 if [ $result -ne 0 ]; then
     echo "please fix the checkstyle problem before submit the commit"
