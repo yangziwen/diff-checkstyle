@@ -52,6 +52,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
                     <argument>--base-rev</argument>
                     <!-- pass the base-rev value via the system variable -->
                     <argument>${checkstyle.base.rev}</argument>
+                    <argument>--include-staged-codes</argument>
                 </arguments>
             </configuration>
             <dependencies>
@@ -65,7 +66,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
         </plugin>
     </plugins>
    ```
-   * Execute `mvn exec:java -Dcheckstyle.base.rev=HEAD~10 --include-staged-codes` to do the check job。
+   * Execute `mvn exec:java -Dcheckstyle.base.rev=HEAD~10` to do the check job。
 
 ### Others
 * In addition to the [sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml) and [google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml) provided by checkstyle by default, two other configurations, [custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml) and [custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml) which basically conform to the Alibaba code specification, have been added. You can also use your favorite style configuration by specifying the absolute file path with <b>-c</b> option.

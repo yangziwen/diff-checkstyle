@@ -50,6 +50,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
                     <argument>--base-rev</argument>
                     <!-- 通过系统变量传入base-rev参数 -->
                     <argument>${checkstyle.base.rev}</argument>
+                    <argument>--include-staged-codes</argument>
                 </arguments>
             </configuration>
             <dependencies>
@@ -63,7 +64,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
         </plugin>
     </plugins>
    ```
-   * 在项目中执行`mvn exec:java -Dcheckstyle.base.rev=HEAD~10 --include-staged-codes`即可进行增量的代码风格检查，并可在调用脚本中基于命令的返回值($?)判断是否存在代码风格问题。
+   * 在项目中执行`mvn exec:java -Dcheckstyle.base.rev=HEAD~10`即可进行增量的代码风格检查，并可在调用脚本中基于命令的返回值($?)判断是否存在代码风格问题。
 
 ### 其他
 * 除了checkstyle默认提供的[sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml)和[google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml)配置，还追加了[custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml)和[custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml)这两个基本符合阿里巴巴代码规范的配置。
