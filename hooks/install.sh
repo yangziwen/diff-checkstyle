@@ -57,7 +57,7 @@ function install_global_hook() {
         git config --global core.hooksPath ~/.githooks
         hook_path="`git config --global --get core.hooksPath`"
     fi
-    if [[ ! -f $hook_path ]]; then
+    if [[ ! -d $hook_path ]]; then
         mkdir -p $hook_path
     fi
     pre_commit_script_path="`get_pre_commit_script_path`"

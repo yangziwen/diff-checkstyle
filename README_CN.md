@@ -67,7 +67,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
    * 在项目中执行`mvn exec:java -Dcheckstyle.base.rev=HEAD~10`即可进行增量的代码风格检查，并可在调用脚本中基于命令的返回值($?)判断是否存在代码风格问题。
 
 * 在本地提交commit时执行检查
-   * 将[pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit)钩子和diff-checkstyle.jar文件拷贝到git的hooks目录中(${git_dir}/.git/hooks)，即可实现每次提交commit前的增量代码风格检查，并打断可能引入增量代码风格问题的提交。
+   * 将[pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit)钩子和[diff-checkstyle.jar](https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.2/diff-checkstyle.jar)文件拷贝到git的hooks目录中(${git_dir}/.git/hooks)，即可实现每次提交commit前的增量代码风格检查，并打断可能引入增量代码风格问题的提交。
    * 亦可运行下面的命令来安装钩子
     ```Shell
     # 下载安装脚本
