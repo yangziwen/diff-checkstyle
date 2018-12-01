@@ -67,9 +67,20 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
     </plugins>
    ```
    * Execute `mvn exec:java -Dcheckstyle.base.rev=HEAD~10` to do the check job。
+* Run when submitting a commit to your repository
+    * Copy the [pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit) hook and the diff-checkstyle.jar file to the git hooks directory (${git_dir}/.git/hooks). This hook will do the check job whenever you submit a commit to your repository, and aborts the commit if it will introduce any incremental style problems.
+    * Or you can run the following commands to install the hook
+    ```Shell
+    # Download the install.sh
+    curl https://raw.githubusercontent.com/yangziwen/diff-checkstyle/master/hooks/install.sh > install.sh
+
+    # Install the hook to a specified git repository
+    sh install.sh --repo-path=${the_absolute_path_of_your_git_repository}
+
+    # Or install the hook globally
+    sh install.sh --global
+    ```
 
 ### Others
 * In addition to the [sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml) and [google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml) provided by checkstyle by default, two other configurations, [custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml) and [custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml) which basically conform to the Alibaba code specification, have been added. You can also use your favorite style configuration by specifying the absolute file path with <b>-c</b> option.
 * Scanning with a changed file that has not been submitted and also not been added to the staging area may cause the modified code line calculated being inconsistent with the code line of the actual scanned file in the workspace, so please submit all changes first.
-* Copy the [pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit) script and the diff-checkstyle.jar file to the git hooks directory (${git_dir}/.git/hooks), and it will do the check job whenever you submit a commit to your repository.
-

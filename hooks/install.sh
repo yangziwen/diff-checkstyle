@@ -9,11 +9,15 @@ DIFF_CHECKSTYLE_GITHUB_URL="https://github.com/yangziwen/diff-checkstyle"
 function get_value_from_opts() {
     key="--$1="
     value=`echo "${opts##*${key}}" | awk -F' --' '{print $1}'`
-    if [[ "$value" =~ ^-- ]]; then
-        echo ""
-    else
+    if [[ ! "$value" =~ ^-- ]]; then
         echo "$value"
+        return 0
     fi
+    if [[ "$opts" =~ --$1($|\ ) ]]; then
+        echo "true"
+        return 0
+    fi
+    echo ""
 }
 
 function is_diff_checkstyle_pre_commit_script() {
@@ -92,5 +96,5 @@ if [[ -n "$repo_path" ]]; then
 fi
 
 echo "Please specify the options correctly"
-echo "  --global=true => install the diff-checkstyle hook globally"
-echo "  --repo-path=\${your_git_repo_absolute_path} => install the diff-checkstyle hook to the specified git repository"
+echo "  --global => install the diff-checkstyle hook globally"
+echo "  --repo-path=\${the_absolute_path_of_your_git_repository} => install the diff-checkstyle hook to the specified git repository"
