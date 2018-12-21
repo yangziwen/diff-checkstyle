@@ -264,7 +264,7 @@ public final class Main {
                 List<File> filesToProcess = Collections.emptyList();
 
                 if (commandLine.hasOption(OPTION_GIT_DIR_NAME)) {
-                    filesToProcess = getGitDiffFilesToProcess(commandLine);
+                    filesToProcess = getGitDiffFilesToProcess(getExclusions(commandLine), commandLine);
                     if (CollectionUtils.isEmpty(filesToProcess)) {
                         System.out.println("There is no file need to check");
                         return;
@@ -798,7 +798,7 @@ public final class Main {
         return files;
     }
 
-    private static List<File> getGitDiffFilesToProcess(CommandLine commandLine) {
+    private static List<File> getGitDiffFilesToProcess(List<Pattern> patternsToExclude, CommandLine commandLine) {
         String gitDirPath = commandLine.getOptionValue(OPTION_GIT_DIR_NAME);
         File repoDir = new File(gitDirPath);
         if (!repoDir.isDirectory()) {
@@ -816,6 +816,8 @@ public final class Main {
             List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev, includeStagedCodes)
                     .stream()
                     .filter(diffEntry -> !diffEntry.isDeleteOnly())
+                    .filter(diffEntry -> patternsToExclude.stream()
+                            .noneMatch(p -> p.matcher(diffEntry.getNewPath()).matches()))
                     .collect(Collectors.toList());
 
             DIFF_ENTRY_LIST.addAll(diffEntryList);

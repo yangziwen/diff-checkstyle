@@ -8,8 +8,14 @@ if [ ! -f "${GIT_HOOK_DIR}/diff-checkstyle.jar" ]; then
     echo "diff-checkstyle.jar does not exist!"
     exit 0
 fi
+exclude_regexp="`git config --get checkstyle.exclude-regexp`"
+exclude_regexp_opt=""
+if [ -n "$exclude_regexp" ]; then
+	exclude_regexp_opt="--exclude-regexp $exclude_regexp"
+fi
+
 echo "Check Style"
-java -jar ${GIT_HOOK_DIR}/diff-checkstyle.jar -c /custom_checks.xml --git-dir ${GIT_ROOT_DIR} --include-staged-codes
+java -jar ${GIT_HOOK_DIR}/diff-checkstyle.jar -c /custom_checks.xml --git-dir ${GIT_ROOT_DIR} --include-staged-codes $exclude_regexp_opt
 result=$?
 if [ $result -ne 0 ]; then
     echo "please fix the checkstyle problem before submit the commit"

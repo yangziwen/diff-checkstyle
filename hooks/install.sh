@@ -64,6 +64,7 @@ function install_global_hook() {
     diff_checkstyle_jar_path="`get_diff_checkstyle_jar_path`"
     cp $pre_commit_script_path $hook_path/pre-commit
     cp $diff_checkstyle_jar_path $hook_path/diff-checkstyle.jar
+    chmod +x $hook_path/pre-commit
     echo "diff-checkstyle pre-commit hook is intalled globally!"
 }
 
