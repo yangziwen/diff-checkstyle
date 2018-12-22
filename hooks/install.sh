@@ -2,9 +2,8 @@
 
 opts="$*"
 
-PRE_COMMIT_BLOB_ID="300274dbb55070da156ac594c97b77cbd4c1f5c5"
 PRE_COMMIT_FILE_URL="https://raw.githubusercontent.com/yangziwen/diff-checkstyle/master/hooks/pre-commit"
-DIFF_CHECKSTYLE_GITHUB_URL="https://github.com/yangziwen/diff-checkstyle"
+DIFF_CHECKSTYLE_RELEASE_URL="https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.3/diff-checkstyle.jar"
 
 function get_value_from_opts() {
     key="--$1="
@@ -28,27 +27,13 @@ function is_diff_checkstyle_pre_commit_script() {
 }
 
 function get_pre_commit_script_path() {
-    hook_names=("pre-commit" "hooks/pre-commit" "pre-commit-diff-checkstyle")
-    for hook_name in ${hook_names[@]}; do
-        [ -f $hook_name ] && is_diff_checkstyle_pre_commit_script $hook_name && echo "$hook_name" && exit 0
-    done
     curl $PRE_COMMIT_FILE_URL > pre-commit-diff-checkstyle
     echo "pre-commit-diff-checkstyle"
 }
 
 function get_diff_checkstyle_jar_path() {
-    if [[ -f diff-checkstyle.jar ]]; then
-        echo "diff-checkstyle.jar" && exit 0
-    fi
-    if [[ -f target/diff-checkstyle.jar ]]; then
-        echo "target/diff-checkstyle.jar" && exit 0
-    fi
-    if [[ -f diff-checkstyle/target/diff-checkstyle.jar ]]; then
-        echo "diff-checkstyle/target/diff-checkstyle.jar" && exit 0
-    fi
-    git clone --depth 1 $DIFF_CHECKSTYLE_GITHUB_URL
-    cd diff-checkstyle && mvn package 2>&1 > /dev/null
-    echo "diff-checkstyle/target/diff-checkstyle.jar"
+    curl -L -o diff-checkstyle.jar $DIFF_CHECKSTYLE_RELEASE_URL
+    echo "diff-checkstyle.jar"
 }
 
 function install_global_hook() {
