@@ -68,7 +68,7 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
    ```
    * Execute `mvn exec:java -Dcheckstyle.base.rev=HEAD~10` to do the check job。
 * Run when submitting a commit to your repository
-    * Copy the [pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit) hook and the [diff-checkstyle.jar](https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.2/diff-checkstyle.jar) file to the git hooks directory (${git_dir}/.git/hooks). This hook will do the check job whenever you submit a commit to your repository, and aborts the commit if it will introduce any incremental style problems.
+    * Copy the [pre-commit](https://github.com/yangziwen/diff-checkstyle/blob/master/hooks/pre-commit) hook and the [diff-checkstyle.jar](https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.3/diff-checkstyle.jar) file to the git hooks directory (${git_dir}/.git/hooks). This hook will do the check job whenever you submit a commit to your repository, and aborts the commit if it will introduce any incremental style problems.
     * Or you can run the following commands to install the hook
     ```Shell
     # Download the install.sh

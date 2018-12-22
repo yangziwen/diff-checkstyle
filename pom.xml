@@ -5,7 +5,7 @@
 
     <groupId>io.github.yangziwen</groupId>
     <artifactId>diff-checkstyle</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>diff-checkstyle</name>
