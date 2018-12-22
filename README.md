@@ -80,6 +80,10 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
     # Or install the hook globally
     sh install.sh --global
     ```
+    * You can set the exampt path via git config
+    ```
+    git config checkstyle.exclude-regexp=.+-client/.*
+    ```
 
 ### Others
 * In addition to the [sun_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/sun_checks.xml) and [google_checks.xml](https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml) provided by checkstyle by default, two other configurations, [custom_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_checks.xml) and [custom_full_checks.xml](https://github.com/yangziwen/diff-checkstyle/blob/master/src/main/resources/custom_full_checks.xml) which basically conform to the Alibaba code specification, have been added. You can also use your favorite style configuration by specifying the absolute file path with <b>-c</b> option.
