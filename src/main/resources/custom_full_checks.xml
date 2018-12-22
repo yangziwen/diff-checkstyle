@@ -24,10 +24,18 @@
         <module name="UnusedImports" />
 
         <!-- 注释检查 -->
-        <!-- 检查构造函数的javadoc -->
+        <!-- 检查方法和构造函数的javadoc -->
         <module name="JavadocType">
+            <property name="scope" value="public"/>
             <property name="allowUnknownTags" value="true"/>
             <message key="javadoc.missing" value="类注释：缺少Javadoc注释。"/>
+        </module>
+        <module name="JavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="tokens" value="METHOD_DEF" />
+            <!--允许get set 方法没有注释-->
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+            <message key="javadoc.missing" value="方法注释：缺少Javadoc注释。"/>
         </module>
 
         <!-- 命名检查 -->
@@ -47,6 +55,22 @@
              <property name="severity" value="warning"/>
              <message key="name.invalidPattern" value="名称 ''{0}'' 要符合 ''{1}''格式."/>
         </module>
+        <!-- 抽象类名的检查 -->
+        <module name="AbstractClassName">
+            <property name="format" value="^(Abstract|Base).+$" />
+        </module>
+        <!-- 类的泛型名称 -->
+        <module name="ClassTypeParameterName">
+            <property name="format" value="^[A-Z]{1,2}$"/>
+        </module>
+        <!-- 接口的泛型名称 -->
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="^[A-Z]{1,2}$"/>
+        </module>
+        <!-- 方法的泛型名称 -->
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z]{1,2}$"/>
+        </module>
         <!-- 非static型变量的检查 -->
         <module name="MemberName" />
         <!-- 方法名的检查 -->
@@ -55,6 +79,8 @@
         <module name="ParameterName " />
         <!-- 常量名的检查（只允许大写），默认^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$ -->
         <module name="ConstantName" />
+        <!-- lambda表达式的参数名 -->
+        <module name="LambdaParameterName"/>
 
         <!-- 定义检查 -->
         <!-- 检查数组类型定义的样式 -->
@@ -67,10 +93,10 @@
         <module name="LineLength">
             <property name="max" value="120" />
         </module>
-        <!-- 方法不超过50行 -->
+        <!-- 方法不超过100行 -->
         <module name="MethodLength">
             <property name="tokens" value="METHOD_DEF" />
-            <property name="max" value="50" />
+            <property name="max" value="100" />
         </module>
         <!-- 方法的参数个数不超过5个。 并且不对构造方法进行检查-->
         <module name="ParameterNumber">
@@ -96,6 +122,16 @@
         <module name="WhitespaceAfter"/>
         <!-- 检查分隔符周围是否有空白 -->
         <module name="WhitespaceAround"/>
+
+        <!-- 缩进检查 -->
+        <module name="Indentation"/>
+
+        <!-- 换行检查 -->
+        <module name="EmptyLineSeparator">
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+        </module>
 
         <!-- 修饰符检查 -->
         <!-- 检查修饰符的顺序是否遵照java语言规范，默认public、protected、private、abstract、static、final、transient、volatile、synchronized、native、strictfp -->
@@ -165,10 +201,6 @@
         <module name="Regexp">
             <property name="format" value="System\.out\.println"/>
             <property name="illegalPattern" value="true"/>
-        </module>
-        <!-- return个数 3个-->
-        <module name="ReturnCount">
-            <property name="max" value="3"/>
         </module>
         <!--try catch 异常处理数量 3-->
         <module name="NestedTryDepth ">
