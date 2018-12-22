@@ -79,6 +79,14 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
     # 或者安装钩子到全局
     sh install.sh --global
     ```
+    * 可通过以下方式开启或关闭检查
+    ```
+    # 开启检查
+    git config checkstyle.enabled true
+
+    # 关闭检查
+    git config checkstyle.enabled false
+    ```
     * 可通过以下方式设置代码库中的豁免路径
     ```
     git config checkstyle.exclude-regexp=.+-client/.*

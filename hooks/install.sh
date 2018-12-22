@@ -65,6 +65,7 @@ function install_global_hook() {
     cp $pre_commit_script_path $hook_path/pre-commit
     cp $diff_checkstyle_jar_path $hook_path/diff-checkstyle.jar
     chmod +x $hook_path/pre-commit
+    git config --global checkstyle.enabled true
     echo "diff-checkstyle pre-commit hook is intalled globally!"
 }
 
@@ -80,6 +81,7 @@ function install_hook_to_repo() {
     cp $pre_commit_script_path $hook_path/pre-commit
     cp $diff_checkstyle_jar_path $hook_path/diff-checkstyle.jar
     chmod +x $hook_path/pre-commit
+    git config checkstyle.enabled true
     echo "diff-checkstyle pre-commit hook is installed to $repo_path!"
 }
 

@@ -80,6 +80,14 @@ java -jar diff-checkstyle.jar -c /custom_checks.xml --git-dir ${your_git_repo_pa
     # Or install the hook globally
     sh install.sh --global
     ```
+    * You can enable or disable the check in the following way
+    ```
+    # Enable the check
+    git config checkstyle.enabled true
+
+    # Disable the check
+    git config checkstyle.enabled false
+    ```
     * You can set the exampt path via git config
     ```
     git config checkstyle.exclude-regexp=.+-client/.*
