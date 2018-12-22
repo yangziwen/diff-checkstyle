@@ -11,6 +11,7 @@ import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Filter;
+import com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck;
 
 import io.github.yangziwen.checkstyle.diff.DiffEntryWrapper;
 
@@ -31,6 +32,8 @@ public class DiffLineFilter extends AutomaticBean implements Filter {
 
     /**
      * Only accept events that corresponding to the diff edits
+     *
+     * @return True if the event is corresponding to the diff edits
      */
     @Override
     public boolean accept(AuditEvent event) {
@@ -39,10 +42,10 @@ public class DiffLineFilter extends AutomaticBean implements Filter {
             return false;
         }
         for (Edit edit : editList) {
-            if (edit.getType() == Edit.Type.DELETE) {
-                continue;
-            }
             if (edit.getBeginB() < event.getLine() && edit.getEndB() >= event.getLine()) {
+                return true;
+            }
+            if (isEmptyLineSeparatorCheck(event) && event.getLine() == edit.getEndB() + 1) {
                 return true;
             }
         }
@@ -52,6 +55,10 @@ public class DiffLineFilter extends AutomaticBean implements Filter {
     @Override
     protected void finishLocalSetup() throws CheckstyleException {
         // do nothing
+    }
+
+    private boolean isEmptyLineSeparatorCheck(AuditEvent event) {
+        return EmptyLineSeparatorCheck.class.getName().equals(event.getLocalizedMessage().getSourceName());
     }
 
 }

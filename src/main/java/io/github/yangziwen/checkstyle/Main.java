@@ -815,7 +815,7 @@ public final class Main {
         try {
             List<DiffEntryWrapper> diffEntryList = calculator.calculateDiff(repoDir, oldRev, newRev, includeStagedCodes)
                     .stream()
-                    .filter(diffEntry -> !diffEntry.isDeleteOnly())
+                    .filter(diffEntry -> !diffEntry.isDeleted())
                     .filter(diffEntry -> patternsToExclude.stream()
                             .noneMatch(p -> p.matcher(diffEntry.getNewPath()).matches()))
                     .collect(Collectors.toList());
