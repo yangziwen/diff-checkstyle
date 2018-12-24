@@ -90,7 +90,7 @@ git config checkstyle.enabled false
 ```
 * 可通过以下方式设置代码库中的豁免路径
 ```
-git config checkstyle.exclude-regexp=.+-client/.*
+git config checkstyle.exclude-regexp .+-client/.*
 ```
 
 ### 其他

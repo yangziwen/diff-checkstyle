@@ -92,7 +92,7 @@ git config checkstyle.enabled false
 ```
 * You can set the exampt path via git config
 ```
-git config checkstyle.exclude-regexp=.+-client/.*
+git config checkstyle.exclude-regexp .+-client/.*
 ```
 
 ### Others
