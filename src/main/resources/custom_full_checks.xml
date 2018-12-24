@@ -89,9 +89,9 @@
         <module name="UpperEll"/>
 
         <!-- 长度检查 -->
-        <!-- 每行不超过120个字符 -->
+        <!-- 每行不超过140个字符 -->
         <module name="LineLength">
-            <property name="max" value="120" />
+            <property name="max" value="140" />
         </module>
         <!-- 方法不超过100行 -->
         <module name="MethodLength">
