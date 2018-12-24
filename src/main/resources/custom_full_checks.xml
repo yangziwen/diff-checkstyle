@@ -162,6 +162,11 @@
         </module>
         <!-- 检查子表达式中是否有赋值操作 -->
         <module name="InnerAssignment"/>
+        <!-- 检查是否有"魔术"数字 -->
+        <module name="MagicNumber">
+           <property name="ignoreNumbers" value="0, 1, -1"/>
+           <property name="ignoreAnnotation" value="true"/>
+       </module>
         <!-- 检查switch语句是否有default -->
         <module name="MissingSwitchDefault"/>
         <!-- 检查是否有过度复杂的布尔表达式 -->
