@@ -44,6 +44,7 @@
             <property name="tokens" value="METHOD_DEF" />
             <!--允许get set 方法没有注释-->
             <property name="allowMissingPropertyJavadoc" value="true"/>
+            <property name="allowMissingThrowsTags" value="true"/>
             <message key="javadoc.missing" value="方法注释：缺少Javadoc注释。"/>
         </module>
 
