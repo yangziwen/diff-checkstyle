@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,6 +102,14 @@ public class DiffCalculator {
             Git git,
             File repoDir,
             Set<String> excludedPathSet) throws Exception {
+
+        if (Objects.equals(oldCommit.getId(), newCommit.getId())) {
+            return Collections.emptyList();
+        }
+
+        if (Objects.equals(oldCommit.getTree().getId(), newCommit.getTree().getId())) {
+            return Collections.emptyList();
+        }
 
         RenameDetector detector = new RenameDetector(git.getRepository());
         AbstractTreeIterator oldTree = new CanonicalTreeParser(null, reader, oldCommit.getTree());

@@ -14,6 +14,12 @@ if [ ! -f "${GIT_HOOK_DIR}/diff-checkstyle.jar" ]; then
     echo "diff-checkstyle.jar does not exist!"
     exit 0
 fi
+# check whether this is the first commit
+git log --oneline -1 > /dev/null 2>&1
+result=$?
+if [ $result -ne 0 ]; then
+    exit 0
+fi
 
 exclude_regexp="`git config --get checkstyle.exclude-regexp`"
 exclude_regexp_opt=""
