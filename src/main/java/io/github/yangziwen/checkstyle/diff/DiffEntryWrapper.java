@@ -9,14 +9,14 @@ import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.Edit.Type;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * The diff entry wrapper
  *
  * @author yangziwen
  */
-@Data
+@Getter
 @Builder
 public class DiffEntryWrapper {
 

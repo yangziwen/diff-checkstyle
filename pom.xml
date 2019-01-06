@@ -256,7 +256,8 @@
                 <version>0.8.2</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/*Main.class</exclude>
+                        <exclude>**/Main.class</exclude>
+                        <exclude>**/DiffHelper.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -274,7 +275,8 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                            <exclude>**/*Main.class</exclude>
+                            <exclude>**/Main.class</exclude>
+                            <excludes>**/DiffHelper.class</excludes>
                         </configuration>
                     </execution>
                 </executions>

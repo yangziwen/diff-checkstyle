@@ -1,5 +1,6 @@
 # diff-checkstyle
-![ci](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)
+[![Build Status](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)](https://www.travis-ci.org/yangziwen/diff-checkstyle)
+[![Coverage Status](https://coveralls.io/repos/github/yangziwen/diff-checkstyle/badge.svg?branch=master)](https://coveralls.io/github/yangziwen/diff-checkstyle?branch=master)
 ### 介绍
 在使用[checkstyle](http://checkstyle.sourceforge.net/)检查项目中的代码风格时，工具会一次性输出每个文件中的全部问题。这使得我们很难在清理完存量代码风格问题之前，对正在开发的代码进行有效的风格检查。
 

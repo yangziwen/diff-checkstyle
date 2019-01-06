@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.diff.HistogramDiff;
+import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.junit.RepositoryTestCase;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -32,6 +33,68 @@ public class DiffCalculatorTest extends RepositoryTestCase {
     public void before() throws Exception {
         MockitoAnnotations.initMocks(this);
         setUp();
+    }
+
+    @Test
+    public void testCalculateDiff() throws Exception {
+        try (Git git = new Git(db);
+                ObjectReader reader = git.getRepository().newObjectReader()) {
+            File repoDir = git.getRepository().getDirectory().getParentFile();
+            File fileToChange = new File(repoDir, "changed.txt");
+            File fileRemainUnchanged = new File(repoDir, "unchanged.txt");
+            writeStringToFile(fileToChange, new StringBuilder()
+                    .append("first line")
+                    .append("\n")
+                    .append("second line")
+                    .append("\n")
+                    .append("third line")
+                    .append("\n")
+                    .toString());
+            writeStringToFile(fileRemainUnchanged, "no change");
+            git.add()
+                .addFilepattern(fileToChange.getName())
+                .addFilepattern(fileRemainUnchanged.getName())
+                .call();
+            RevCommit oldCommit = doCommit(git);
+
+            writeStringToFile(fileToChange, new StringBuilder()
+                    .append("first line")
+                    .append("\n")
+                    .append("second line changed")
+                    .append("\n")
+                    .append("third line")
+                    .append("\n")
+                    .append("fourth line")
+                    .toString());
+            git.add().addFilepattern(fileToChange.getName()).call();
+            RevCommit newCommit = doCommit(git);
+
+            DiffCalculator calculator = DiffCalculator.builder()
+                    .diffAlgorithm(new HistogramDiff())
+                    .comparator(RawTextComparator.DEFAULT)
+                    .bigFileThreshold(DiffHelper.DEFAULT_BIG_FILE_THRESHOLD)
+                    .build();
+            List<DiffEntryWrapper> wrappers = calculator.calculateDiff(
+                    repoDir, oldCommit.name(), newCommit.name(), true);
+
+            Assert.assertEquals(1, wrappers.size());
+
+            DiffEntryWrapper wrapper = wrappers.get(0);
+            Assert.assertEquals(fileToChange, wrapper.getNewFile());
+
+            List<Edit> edits = wrapper.getEditList();
+
+            Edit replaceEdit = edits.get(0);
+            Assert.assertEquals(Edit.Type.REPLACE, replaceEdit.getType());
+            Assert.assertEquals(1, replaceEdit.getBeginB());
+            Assert.assertEquals(2, replaceEdit.getEndB());
+
+            Edit insertEdit = edits.get(1);
+            Assert.assertEquals(Edit.Type.INSERT, insertEdit.getType());
+            Assert.assertEquals(3, insertEdit.getBeginB());
+            Assert.assertEquals(4, insertEdit.getEndB());
+        }
+
     }
 
     @Test

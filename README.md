@@ -1,5 +1,6 @@
 # diff-checkstyle
-![ci](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)
+[![Build Status](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)](https://www.travis-ci.org/yangziwen/diff-checkstyle)
+[![Coverage Status](https://coveralls.io/repos/github/yangziwen/diff-checkstyle/badge.svg?branch=master)](https://coveralls.io/github/yangziwen/diff-checkstyle?branch=master)
 
 [Chinese Doc](https://github.com/yangziwen/diff-checkstyle/blob/master/README_CN.md)
 ### Introduction
