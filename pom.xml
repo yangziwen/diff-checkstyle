@@ -10,6 +10,7 @@
 
     <name>diff-checkstyle</name>
     <url>http://maven.apache.org</url>
+    <description>Check style problems on the incrementally changed codes</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -132,11 +133,27 @@
         </profile>
     </profiles>
 
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v2.1</name>
+            <url>https://raw.githubusercontent.com/yangziwen/diff-checkstyle/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <scm>
         <url>https://github.com/yangziwen/diff-checkstyle</url>
         <connection>https://github.com/yangziwen/diff-checkstyle</connection>
         <developerConnection>https://github.com/yangziwen/diff-checkstyle</developerConnection>
     </scm>
+
+    <developers>
+        <developer>
+            <name>yangziwen</name>
+            <email>438226625@qq.com</email>
+            <url>https://yangziwen.github.io</url>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
