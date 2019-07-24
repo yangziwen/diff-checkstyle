@@ -3,7 +3,7 @@
 opts="$*"
 
 PRE_COMMIT_FILE_URL="https://raw.githubusercontent.com/yangziwen/diff-checkstyle/master/hooks/pre-commit"
-DIFF_CHECKSTYLE_RELEASE_URL="https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.3/diff-checkstyle.jar"
+DIFF_CHECKSTYLE_RELEASE_URL="https://github.com/yangziwen/diff-checkstyle/releases/download/0.0.4/diff-checkstyle.jar"
 CHECKSTYLE_CONFIG_FILE_URL="https://raw.githubusercontent.com/yangziwen/diff-checkstyle/master/src/main/resources/custom_checks.xml"
 
 function get_value_from_opts() {
