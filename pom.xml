@@ -17,7 +17,7 @@
         <checkstyle.base.rev>HEAD~</checkstyle.base.rev>
         <jgit.version>4.4.1.201607150455-r</jgit.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <checkstyle.version>8.22</checkstyle.version>
+        <checkstyle.version>8.29</checkstyle.version>
         <cli.version>1.4</cli.version>
         <lombok.version>1.18.2</lombok.version>
         <junit.version>4.12</junit.version>
