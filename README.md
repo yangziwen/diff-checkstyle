@@ -2,6 +2,8 @@
 [![Build Status](https://www.travis-ci.org/yangziwen/diff-checkstyle.svg?branch=master)](https://www.travis-ci.org/yangziwen/diff-checkstyle)
 [![Coverage Status](https://coveralls.io/repos/github/yangziwen/diff-checkstyle/badge.svg?branch=master)](https://coveralls.io/github/yangziwen/diff-checkstyle?branch=master)
 
+*Be aware that this repository is no longer under maintenance, for a better alternative please have a look at [diff-check](https://github.com/yangziwen/diff-check).*
+
 [Chinese Doc](https://github.com/yangziwen/diff-checkstyle/blob/master/README_CN.md)
 ### Introduction
 When using [checkstyle](http://checkstyle.sourceforge.net/) to scan a project, it will output all the problems in each file at once. This makes it difficult to perform an effective style check on the codes under development before cleaning up all the existing style problems.
